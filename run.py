@@ -4,7 +4,7 @@ import os
 from tavern.core import run
 
 def integration_test():
-    command = ["coverage", "run", "--source", ".", "myapp.py"]
+    command = ["coverage", "run", "--source", "myapp", "myapp/myapp.py"]
     server = subprocess.Popen(command, stderr = subprocess.PIPE)
 
     for line in server.stderr:
