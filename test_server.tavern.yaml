@@ -1,0 +1,11 @@
+test_name: myapp
+
+stages:
+  - name: ping
+    request:
+      url: http://localhost:8080/ping
+      method: GET
+    response:
+      body:
+        ping: pong
+      status_code: 200
