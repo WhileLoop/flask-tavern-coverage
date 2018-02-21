@@ -1,0 +1,11 @@
+test_name: myapp2
+
+stages:
+  - name: pang
+    request:
+      url: http://localhost:8080/pang
+      method: GET
+    response:
+      body:
+        ping: pong
+      status_code: 200

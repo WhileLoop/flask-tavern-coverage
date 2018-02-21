@@ -1,17 +1,19 @@
-import signal
+from flask import Flask, jsonify, request
 
-from flask import Flask, jsonify
-from flask import request
+app = Flask(__name__)
 
-def create_app():
-    app = Flask(__name__)
+@app.route('/ping')
+def ping():
+    return jsonify(ping = 'pong')
 
-    @app.route('/ping')
-    def ping():
-        return jsonify(ping = 'pong')
+@app.route('/pang')
+def pang():
+    return jsonify(ping = 'pong')
 
-    return app
+@app.route('/double')
+def double():
+    number = request.args.get('number')
+    return jsonify(double = int(number) * 2)
 
-if __name__ == '__main__': # pragma: no cover
-    app = create_app()
+if __name__ == '__main__':
     app.run(port = 8080)

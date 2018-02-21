@@ -1,7 +1,9 @@
 import subprocess
 import signal
 import os
-from tavern.core import run
+import sys
+
+import pytest
 
 def integration_test():
     command = ["coverage", "run", "--source", "myapp", "myapp/myapp.py"]
@@ -11,16 +13,14 @@ def integration_test():
         if line.startswith(b' * Running on'):
             break
 
-    success = run("test_server.tavern.yaml", {})
-    if not success:
-        print("Error running tests")
+    pytest.main()
 
     os.kill(server.pid, signal.SIGINT)
     if not server.poll():
         print("Process correctly halted")
 
-    subprocess.Popen(["coverage", "html"])
-
+    for line in server.stderr:
+        sys.stdout.write(line.decode("utf-8"))
 
 if __name__ == '__main__':
     integration_test()
