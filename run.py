@@ -13,10 +13,21 @@ def wait_for_port(host, port, tries = 60, interval = 1):
     return False
 
 
+def is_port_available(host, port):
+        try:
+            with socket.create_connection((host, port)):
+                return False
+        except OSError:
+            return True
+
 
 def integration_test():
+    if not is_port_available(host = '127.0.0.1', port = 8080):
+        raise Exception('Port in use.')
+
     command = ["coverage", "run", "--source", "myapp", "myapp/myapp.py"]
     server = subprocess.Popen(command, stderr = subprocess.PIPE)
+
     if not wait_for_port(host = '127.0.0.1', port = 8080):
         raise Exception('Timed out waiting for server.')
 
