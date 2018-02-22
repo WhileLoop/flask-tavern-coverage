@@ -6,10 +6,6 @@ app = Flask(__name__)
 def ping():
     return jsonify(ping = 'pong')
 
-@app.route('/pang')
-def pang():
-    return jsonify(ping = 'pong')
-
 @app.route('/double')
 def double():
     number = request.args.get('number')
