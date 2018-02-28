@@ -1,6 +1,5 @@
-import subprocess, signal, os, sys, socket, time
 import pytest
-
+import subprocess, signal, os, sys, socket, time
 
 def wait_for_port(host, port, tries = 60, interval = 1):
     for _ in range(tries):
@@ -8,7 +7,7 @@ def wait_for_port(host, port, tries = 60, interval = 1):
             with socket.create_connection((host, port)):
                 return True
         except OSError:
-            print('.')
+            sys.stdout.write('.')
             time.sleep(interval)
     return False
 
@@ -20,8 +19,10 @@ def is_port_available(host, port):
         except OSError:
             return True
 
-
-def integration_test():
+@pytest.fixture(scope = "session", autouse = True)
+def flask_server_coverage():
+    print()
+    sys.stdout.write("Starting server")
     if not is_port_available(host = '127.0.0.1', port = 8080):
         raise Exception('Port in use.')
 
@@ -31,14 +32,13 @@ def integration_test():
     if not wait_for_port(host = '127.0.0.1', port = 8080):
         raise Exception('Timed out waiting for server.')
 
-    pytest.main()
+    yield
 
     os.kill(server.pid, signal.SIGINT)
     if not server.poll():
-        print("Server cleanly shutdown.")
+        print()
+        print("Server cleanly shutdown")
 
+    print("Server output:")
     for line in server.stderr:
         sys.stdout.write(line.decode("utf-8"))
-
-if __name__ == '__main__':
-    integration_test()

@@ -2,14 +2,11 @@ all: clean test
 
 clean:
 	rm -rf htmlcov
-	rm -f .coverage
+	rm -rf .coverage
 
 test:
-	python3 run.py
+	pytest test
 	coverage html --fail-under 100
 	@echo "Success!"
 
-browse:
-	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" htmlcov/index.html
-
-.PHONY: test browse
+.PHONY: test
